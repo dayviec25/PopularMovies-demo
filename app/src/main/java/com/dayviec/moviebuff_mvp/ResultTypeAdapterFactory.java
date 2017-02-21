@@ -36,9 +36,9 @@ public class ResultTypeAdapterFactory implements TypeAdapterFactory {
                 JsonElement jsonElement = elementAdapter.read(in);
                 if (jsonElement.isJsonObject()) {
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
-                    if (jsonObject.has("results") && jsonObject.get("results").isJsonObject())
+                    if (jsonObject.has("results") && jsonObject.get("results").isJsonArray())
                     {
-                        jsonElement = jsonObject.get("results");
+                        jsonElement = jsonObject.getAsJsonArray("results");
                     }
                 }
 

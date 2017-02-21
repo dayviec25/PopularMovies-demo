@@ -16,6 +16,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        buildConfigField "String",'APIKEY',"\"67d276946005b13216f8f6b8a2e667c0\""
         buildConfigField "String",'IMAGEURL',"\"https://image.tmdb.org/t/p/w1000/\""
         buildConfigField "String",'MOVIEAPIURL',"\"https://api.themoviedb.org/3/\""
     }

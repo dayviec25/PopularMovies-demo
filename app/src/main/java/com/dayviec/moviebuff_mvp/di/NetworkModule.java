@@ -34,7 +34,7 @@ public class NetworkModule {
     }
 
     @Provides
-    public MovieService provideMovieServicePlacesService(Retrofit retrofit) {
-        return (MovieService) retrofit.create(MovieService.class);
+    public MovieService provideMovieService(Retrofit retrofit) {
+        return retrofit.create(MovieService.class);
     }
 }
