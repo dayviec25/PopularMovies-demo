@@ -1,11 +1,18 @@
 package com.dayviec.moviebuff_mvp.presentation;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.dayviec.moviebuff_mvp.BuildConfig;
+import com.dayviec.moviebuff_mvp.MainActivity;
+import com.dayviec.moviebuff_mvp.MediaDetailActivity;
 import com.dayviec.moviebuff_mvp.MovieService;
 import com.dayviec.moviebuff_mvp.model.Movie;
 import com.dayviec.moviebuff_mvp.view.PopularMediaView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -19,6 +26,9 @@ import rx.subscriptions.CompositeSubscription;
  */
 
 public class PopularMediaPresenterImpl implements PopularMediaPresenter {
+
+    private static final String EXTRA_MOVIE = "extra_movie";
+    private static final String EXTRA_POSTER_TRANSITION = "extra_transition";
 
     private String TAG;
     private MovieService service;
@@ -87,5 +97,15 @@ public class PopularMediaPresenterImpl implements PopularMediaPresenter {
         subscriptions.unsubscribe();
     }
 
+    public void openMovieDetails(Activity activity, Movie movie, ImageView ivImagePoster){
+        Gson gson = new Gson();
+        Intent intent = new Intent(activity, MediaDetailActivity.class);
+        intent.putExtra(EXTRA_MOVIE,gson.toJson(movie));
+        String transitionName = ivImagePoster.getTransitionName();
+        intent.putExtra(EXTRA_POSTER_TRANSITION,transitionName);
+        view.displayMovieDetailsView(intent,ivImagePoster,transitionName);
 
+
+
+    }
 }

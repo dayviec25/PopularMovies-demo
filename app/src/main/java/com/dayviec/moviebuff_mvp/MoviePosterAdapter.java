@@ -22,41 +22,53 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
     List<Movie> movieList;
     String TAG;
     Context context;
-    RecyclerItemClickListener listener;
+    private OnMovieClickListener onMovieClickListener;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivMoviePoster;
         TextView tvMovieTitle;
+        TextView tvMovieSubtitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.ivMoviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
+            this.ivMoviePoster = (ImageView) itemView.findViewById(R.id.movie_cover);
             this.tvMovieTitle = (TextView) itemView.findViewById(R.id.movie_title);
+            this.tvMovieSubtitle = (TextView) itemView.findViewById(R.id.movie_subtitle);
         }
     }
-    public MoviePosterAdapter(Context context, List<Movie> movieList, RecyclerItemClickListener listener) {
+    public MoviePosterAdapter(Context context, List<Movie> movieList, OnMovieClickListener onMovieClickListener) {
         this.TAG = "MovieGridView";
         this.movieList = movieList;
         this.context = context;
-        this.listener = listener;
+        this.onMovieClickListener = onMovieClickListener;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_row, null);
-        return new ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null);
+        final ViewHolder viewHolder = new ViewHolder(view);
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMovieClickListener.onMovieClick(movieList.get(viewHolder.getAdapterPosition()), viewHolder.ivMoviePoster);
+            }
+        });
+        return viewHolder;
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        try {
-            Movie movie = movieList.get(position);
-            Picasso.with(context).load(BuildConfig.IMAGEURL + movie.getPosterPath()).into(holder.ivMoviePoster);
-            holder.tvMovieTitle.setText(movie.getTitle());
-        }catch (Exception e){
+        Movie movie = movieList.get(position);
 
-        }
+        Picasso.with(context).load(BuildConfig.IMAGEURL + movie.getPosterPath()).into(holder.ivMoviePoster);
+        holder.ivMoviePoster.setTransitionName("posterTransition" + position);
+        holder.tvMovieTitle.setText(movie.getTitle());
+        holder.tvMovieSubtitle.setText(movie.getReleaseDate());
     }
 
     public int getItemCount() {
         return this.movieList.size();
+    }
+
+   public interface OnMovieClickListener {
+        void onMovieClick(Movie movie, ImageView ivMoviePoster);
     }
 }

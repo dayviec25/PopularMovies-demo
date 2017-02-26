@@ -1,11 +1,14 @@
 package com.dayviec.moviebuff_mvp;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.dayviec.moviebuff_mvp.databinding.ActivityMainBinding;
 import com.dayviec.moviebuff_mvp.di.DaggerNetworkComponent;
@@ -15,6 +18,7 @@ import com.dayviec.moviebuff_mvp.model.Movie;
 import com.dayviec.moviebuff_mvp.presentation.PopularMediaPresenter;
 import com.dayviec.moviebuff_mvp.presentation.PopularMediaPresenterImpl;
 import com.dayviec.moviebuff_mvp.view.PopularMediaView;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -25,10 +29,8 @@ import retrofit2.Call;
 public class MainActivity extends AppCompatActivity implements PopularMediaView{
 
     ActivityMainBinding binding;
-    RecyclerView moviePosterView;
     NetworkComponent networkComponent;
     PopularMediaPresenter presenter;
-
 
     @Inject
     MovieService service;
@@ -41,26 +43,26 @@ public class MainActivity extends AppCompatActivity implements PopularMediaView{
         networkComponent.inject(this);
         presenter = new PopularMediaPresenterImpl(service,this);
         binding.movieRecyclerview.setLayoutManager(new GridLayoutManager(this,2));
-        //binding.movieRecyclerview.addItemDecoration(new Margin);
-        //Call<Movie> service.getPopularMovies(BuildConfig.APIKEY,1).enqueue();
 
         presenter.getPopularMovies();
-        //binding.movieRecyclerview.setAdapter(new);
 
     }
 
     public void displayPopularMovies(List<Movie> movies) {
-        binding.movieRecyclerview.setAdapter(new MoviePosterAdapter(this, movies, new RecyclerItemClickListener() {
+        binding.movieRecyclerview.setAdapter(new MoviePosterAdapter(this, movies, new MoviePosterAdapter.OnMovieClickListener() {
             @Override
-            public void onItemClick(View view, int i) {
-
+            public void onMovieClick(Movie movie, ImageView ivMoviePoster) {
+                presenter.openMovieDetails(MainActivity.this,movie,ivMoviePoster);
             }
-        })
-        );
+        }));
     }
 
-    public void loadAdditionalMovies(List<Movie> movies) {
+    public void displayAdditionalMovies(List<Movie> movies) {
 
+    }
+
+    public void displayMovieDetailsView(Intent intent,ImageView ivMoviePoster, String transitionName){
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,ivMoviePoster,transitionName).toBundle());
     }
 
 }
