@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.dayviec.moviebuff_mvp.model.Movie;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +64,9 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
         Picasso.with(context).load(BuildConfig.IMAGEURL + movie.getPosterPath()).into(holder.ivMoviePoster);
         holder.ivMoviePoster.setTransitionName("posterTransition" + position);
         holder.tvMovieTitle.setText(movie.getTitle());
-        holder.tvMovieSubtitle.setText(movie.getReleaseDate());
+
+        String formattedDate = formatDateString(movie.getReleaseDate());
+        holder.tvMovieSubtitle.setText(formattedDate);
     }
 
     public int getItemCount() {
@@ -70,5 +75,22 @@ public class MoviePosterAdapter extends RecyclerView.Adapter<MoviePosterAdapter.
 
    public interface OnMovieClickListener {
         void onMovieClick(Movie movie, ImageView ivMoviePoster);
+    }
+
+    public void addMoves(List<Movie> movies){
+        movieList.addAll(movies);
+        notifyDataSetChanged();
+    }
+
+    private String formatDateString(String releaseDate){
+        String formattedDate = releaseDate;
+        try {
+            SimpleDateFormat formatter  = new SimpleDateFormat("MMMM dd, yyyy");
+            Date date = formatter.parse(releaseDate);
+            formattedDate = formatter.format(date);
+        }catch (ParseException e){
+
+        }
+        return formattedDate;
     }
 }

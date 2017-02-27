@@ -20,6 +20,7 @@ import com.dayviec.moviebuff_mvp.presentation.PopularMediaPresenterImpl;
 import com.dayviec.moviebuff_mvp.view.PopularMediaView;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements PopularMediaView{
     ActivityMainBinding binding;
     NetworkComponent networkComponent;
     PopularMediaPresenter presenter;
+    GridLayoutManager gridLayoutManager;
+    MoviePosterAdapter moviePosterAdapter;
 
     @Inject
     MovieService service;
@@ -42,23 +45,38 @@ public class MainActivity extends AppCompatActivity implements PopularMediaView{
         networkComponent = DaggerNetworkComponent.builder().networkModule(new NetworkModule()).build();
         networkComponent.inject(this);
         presenter = new PopularMediaPresenterImpl(service,this);
-        binding.movieRecyclerview.setLayoutManager(new GridLayoutManager(this,2));
 
-        presenter.getPopularMovies();
-
-    }
-
-    public void displayPopularMovies(List<Movie> movies) {
-        binding.movieRecyclerview.setAdapter(new MoviePosterAdapter(this, movies, new MoviePosterAdapter.OnMovieClickListener() {
+        gridLayoutManager = new GridLayoutManager(this,2);
+        binding.movieRecyclerview.setLayoutManager(gridLayoutManager);
+        moviePosterAdapter = new MoviePosterAdapter(this,new ArrayList<Movie>(), new MoviePosterAdapter.OnMovieClickListener() {
             @Override
             public void onMovieClick(Movie movie, ImageView ivMoviePoster) {
                 presenter.openMovieDetails(MainActivity.this,movie,ivMoviePoster);
             }
-        }));
+        });
+
+        binding.movieRecyclerview.setAdapter(moviePosterAdapter);
+        presenter.getPopularMovies();
+
+
+        binding.movieRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
+                    presenter.checkToLoadAdditionalMovies(moviePosterAdapter.getItemCount(),gridLayoutManager.findLastVisibleItemPosition());
+                }
+            }
+        });
+
+    }
+
+    public void displayPopularMovies(List<Movie> movies) {
+        moviePosterAdapter.addMoves(movies);
     }
 
     public void displayAdditionalMovies(List<Movie> movies) {
-
+        moviePosterAdapter.addMoves(movies);
     }
 
     public void displayMovieDetailsView(Intent intent,ImageView ivMoviePoster, String transitionName){

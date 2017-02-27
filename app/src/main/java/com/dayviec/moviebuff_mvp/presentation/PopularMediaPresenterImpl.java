@@ -27,6 +27,8 @@ import rx.subscriptions.CompositeSubscription;
 
 public class PopularMediaPresenterImpl implements PopularMediaPresenter {
 
+    private final static int VISIBLE_THRESHOLD = 4;
+    private final static int RESPONSE_COUNT = 20;
     private static final String EXTRA_MOVIE = "extra_movie";
     private static final String EXTRA_POSTER_TRANSITION = "extra_transition";
 
@@ -104,8 +106,12 @@ public class PopularMediaPresenterImpl implements PopularMediaPresenter {
         String transitionName = ivImagePoster.getTransitionName();
         intent.putExtra(EXTRA_POSTER_TRANSITION,transitionName);
         view.displayMovieDetailsView(intent,ivImagePoster,transitionName);
+    }
 
-
-
+    public void checkToLoadAdditionalMovies(int currentItemCount, int lastVisibleItemPosition ){
+        if (lastVisibleItemPosition > currentItemCount - VISIBLE_THRESHOLD){
+            //TODO change logic to use page node from response.
+            getAdditionalMoviesByPage(Math.round(currentItemCount/RESPONSE_COUNT) + 1);
+        }
     }
 }
