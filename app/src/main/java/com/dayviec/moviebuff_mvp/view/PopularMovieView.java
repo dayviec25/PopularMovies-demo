@@ -8,10 +8,8 @@ import com.dayviec.moviebuff_mvp.model.Movie;
 
 import java.util.List;
 
-public interface PopularMediaView {
-
+public interface PopularMovieView {
+    void updateSearchView(List<Movie> movies);
     void displayPopularMovies(List<Movie> movies);
-    void displayAdditionalMovies(List<Movie> movies);
     void displayMovieDetailsView(Intent intent,ImageView ivMoviePoster,String transitionName);
-
 }

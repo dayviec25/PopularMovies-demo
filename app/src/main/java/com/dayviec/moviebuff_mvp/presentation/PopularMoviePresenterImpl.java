@@ -1,19 +1,18 @@
 package com.dayviec.moviebuff_mvp.presentation;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.dayviec.moviebuff_mvp.BuildConfig;
-import com.dayviec.moviebuff_mvp.MainActivity;
-import com.dayviec.moviebuff_mvp.MediaDetailActivity;
+import com.dayviec.moviebuff_mvp.MovieDetailActivity;
 import com.dayviec.moviebuff_mvp.MovieService;
 import com.dayviec.moviebuff_mvp.model.Movie;
-import com.dayviec.moviebuff_mvp.view.PopularMediaView;
+import com.dayviec.moviebuff_mvp.view.PopularMovieView;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
@@ -25,7 +24,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by dayviec on 19/02/17.
  */
 
-public class PopularMediaPresenterImpl implements PopularMediaPresenter {
+public class PopularMoviePresenterImpl implements PopularMoviePresenter {
 
     private final static int VISIBLE_THRESHOLD = 4;
     private final static int RESPONSE_COUNT = 20;
@@ -35,10 +34,11 @@ public class PopularMediaPresenterImpl implements PopularMediaPresenter {
     private String TAG;
     private MovieService service;
     private CompositeSubscription subscriptions;
-    private PopularMediaView view;
+    private PopularMovieView view;
+    private List<Movie> movieList = new ArrayList<Movie>();
 
-    public PopularMediaPresenterImpl(MovieService service, PopularMediaView view) {
-        this.TAG = "PopularMediaPresenterImpl";
+    public PopularMoviePresenterImpl(MovieService service, PopularMovieView view) {
+        this.TAG = "PopularMoviePresenterImpl";
         this.service = service;
         this.view = view;
         this.subscriptions = new CompositeSubscription();
@@ -101,7 +101,7 @@ public class PopularMediaPresenterImpl implements PopularMediaPresenter {
 
     public void openMovieDetails(Activity activity, Movie movie, ImageView ivImagePoster){
         Gson gson = new Gson();
-        Intent intent = new Intent(activity, MediaDetailActivity.class);
+        Intent intent = new Intent(activity, MovieDetailActivity.class);
         intent.putExtra(EXTRA_MOVIE,gson.toJson(movie));
         String transitionName = ivImagePoster.getTransitionName();
         intent.putExtra(EXTRA_POSTER_TRANSITION,transitionName);

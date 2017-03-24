@@ -6,6 +6,6 @@ import android.content.Intent;
  * Created by davidchung on 2017-02-24.
  */
 
-public interface MediaDetailPresenter extends LifecyclePresenter{
+public interface MovieDetailPresenter extends LifecyclePresenter{
     void getMediaDataFromIntent(Intent intent);
 }

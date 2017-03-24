@@ -1,16 +1,10 @@
 package com.dayviec.moviebuff_mvp.presentation;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 
-import com.dayviec.moviebuff_mvp.MovieService;
 import com.dayviec.moviebuff_mvp.model.Movie;
-import com.dayviec.moviebuff_mvp.view.MediaDetailView;
-import com.dayviec.moviebuff_mvp.view.PopularMediaView;
+import com.dayviec.moviebuff_mvp.view.MovieDetailView;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import rx.subscriptions.CompositeSubscription;
 
@@ -18,17 +12,17 @@ import rx.subscriptions.CompositeSubscription;
  * Created by davidchung on 2017-02-24.
  */
 
-public class MediaDetailPresenterImpl implements MediaDetailPresenter{
+public class MovieDetailPresenterImpl implements MovieDetailPresenter {
 
     private String TAG;
     private static final String EXTRA_MOVIE = "extra_movie";
     private static final String EXTRA_POSTER_TRANSITION = "extra_transition";
 
     private CompositeSubscription subscriptions;
-    private MediaDetailView view;
+    private MovieDetailView view;
 
-    public MediaDetailPresenterImpl(MediaDetailView view) {
-        this.TAG = "PopularMediaPresenterImpl";
+    public MovieDetailPresenterImpl(MovieDetailView view) {
+        this.TAG = "PopularMoviePresenterImpl";
         this.view = view;
         this.subscriptions = new CompositeSubscription();
     }

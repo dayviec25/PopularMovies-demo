@@ -2,9 +2,6 @@ package com.dayviec.moviebuff_mvp;
 
 import android.animation.Animator;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.SharedElementCallback;
@@ -24,12 +21,10 @@ import com.dayviec.moviebuff_mvp.di.DaggerNetworkComponent;
 import com.dayviec.moviebuff_mvp.di.NetworkComponent;
 import com.dayviec.moviebuff_mvp.di.NetworkModule;
 import com.dayviec.moviebuff_mvp.model.Movie;
-import com.dayviec.moviebuff_mvp.presentation.MediaDetailPresenter;
-import com.dayviec.moviebuff_mvp.presentation.MediaDetailPresenterImpl;
-import com.dayviec.moviebuff_mvp.presentation.PopularMediaPresenter;
-import com.dayviec.moviebuff_mvp.view.MediaDetailView;
+import com.dayviec.moviebuff_mvp.presentation.MovieDetailPresenter;
+import com.dayviec.moviebuff_mvp.presentation.MovieDetailPresenterImpl;
+import com.dayviec.moviebuff_mvp.view.MovieDetailView;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 
@@ -37,12 +32,12 @@ import java.util.List;
  * Created by davidchung on 2017-02-24.
  */
 
-public class MediaDetailActivity extends AppCompatActivity implements MediaDetailView{
+public class MovieDetailActivity extends AppCompatActivity implements MovieDetailView {
 
 
     ActivityMediaDetailBinding binding;
     NetworkComponent networkComponent;
-    MediaDetailPresenter presenter;
+    MovieDetailPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -51,7 +46,7 @@ public class MediaDetailActivity extends AppCompatActivity implements MediaDetai
         binding = DataBindingUtil.setContentView(this,R.layout.activity_media_detail);
         networkComponent = DaggerNetworkComponent.builder().networkModule(new NetworkModule()).build();
         networkComponent.inject(this);
-        presenter = new MediaDetailPresenterImpl(this);
+        presenter = new MovieDetailPresenterImpl(this);
         presenter.getMediaDataFromIntent(getIntent());
 
         setEnterSharedElementCallback(new SharedElementCallback() {
