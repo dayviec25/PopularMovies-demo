@@ -1,5 +1,7 @@
 package com.dayviec.moviebuff_mvp;
 
+import android.util.Log;
+
 import com.dayviec.moviebuff_mvp.model.Movie;
 import com.dayviec.moviebuff_mvp.presentation.PopularMoviePresenter;
 import com.dayviec.moviebuff_mvp.presentation.PopularMoviePresenterImpl;
@@ -36,6 +38,8 @@ public class MoviePresenterTest extends TestCase{
     @Mock
     private PopularMovieView popularMovieView;
 
+    private TestSchedulerProvider schedulerProvider = new TestSchedulerProvider();
+
     private String apiKey = BuildConfig.APIKEY;
 
     @Before
@@ -57,7 +61,7 @@ public class MoviePresenterTest extends TestCase{
 
         when(movieService.getPopularMovies(apiKey,page)).thenReturn(Observable.just(popularMovieList));
 
-        PopularMoviePresenter popularMoviePresenter = new PopularMoviePresenterImpl(movieService,popularMovieView);
+        PopularMoviePresenter popularMoviePresenter = new PopularMoviePresenterImpl(movieService,popularMovieView,schedulerProvider);
 
         popularMoviePresenter.getPopularMovies();
 

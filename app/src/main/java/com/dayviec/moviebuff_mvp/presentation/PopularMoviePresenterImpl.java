@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.dayviec.moviebuff_mvp.BuildConfig;
 import com.dayviec.moviebuff_mvp.MovieDetailActivity;
 import com.dayviec.moviebuff_mvp.MovieService;
+import com.dayviec.moviebuff_mvp.SchedulerProvider;
 import com.dayviec.moviebuff_mvp.model.Movie;
 import com.dayviec.moviebuff_mvp.view.PopularMovieView;
 import com.google.gson.Gson;
@@ -34,27 +35,29 @@ public class PopularMoviePresenterImpl implements PopularMoviePresenter {
     private MovieService service;
     private PopularMovieView view;
     private CompositeDisposable subscriptions;
+    private SchedulerProvider schedulerProvider;
 
-    public PopularMoviePresenterImpl(MovieService service, PopularMovieView view) {
+    public PopularMoviePresenterImpl(MovieService service, PopularMovieView view, SchedulerProvider schedulerProvider) {
         this.service = service;
         this.view = view;
+        this.schedulerProvider = schedulerProvider;
         this.subscriptions = new CompositeDisposable();
     }
 
     public void getPopularMovies() {
         subscriptions.add(service.getPopularMovies(BuildConfig.APIKEY, 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
                 .subscribeWith(new DisposableObserver<List<Movie>>() {
                     @Override
                     public void onComplete() {
-                        Log.v(TAG,"onComplete");
+                        //Log.v(TAG,"onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         //view.displayErrorMessage();
-                        Log.v(TAG,"onError:" + e.getMessage());
+                        //Log.v(TAG,"onError:" + e.getMessage());
                     }
 
                     @Override
@@ -66,17 +69,17 @@ public class PopularMoviePresenterImpl implements PopularMoviePresenter {
 
     public void getAdditionalMoviesByPage(int page) {
         subscriptions.add(service.getPopularMovies(BuildConfig.APIKEY, page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
                 .subscribeWith(new DisposableObserver<List<Movie>>() {
                     @Override
                     public void onComplete() {
-                        Log.v(TAG,"onComplete");
+                        //Log.d(TAG,"onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.v(TAG,"onError:" + e.getMessage());
+                        //Log.v(TAG,"onError:" + e.getMessage());
                     }
 
                     @Override

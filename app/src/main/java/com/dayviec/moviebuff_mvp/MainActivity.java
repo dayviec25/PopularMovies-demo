@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements PopularMovieView 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         networkComponent = DaggerNetworkComponent.builder().networkModule(new NetworkModule()).build();
         networkComponent.inject(this);
-        presenter = new PopularMoviePresenterImpl(service,this);
+        presenter = new PopularMoviePresenterImpl(service,this, new AppSchedulerProvider());
 
         gridLayoutManager = new GridLayoutManager(this,2);
         binding.movieRecyclerview.setLayoutManager(gridLayoutManager);
