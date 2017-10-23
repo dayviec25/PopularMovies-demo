@@ -80,5 +80,4 @@ public class MainActivity extends AppCompatActivity implements PopularMovieView 
     public void displayMovieDetailsView(Intent intent,ImageView ivMoviePoster, String transitionName){
         startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this,ivMoviePoster,transitionName).toBundle());
     }
-
 }

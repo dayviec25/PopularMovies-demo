@@ -82,25 +82,6 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieDetai
     }
 
     public void setToolbarImageBackground(Movie movie){
-        /*
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                Drawable drawable = new BitmapDrawable(getResources(),bitmap);
-                binding.toolbar.setBackground(drawable);
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-            }
-        };*/
-
         Picasso.with(this).load(BuildConfig.W500IMAGEURL + movie.getBackdropPath()).into(binding.toolbar);
         Log.v("test",BuildConfig.W500IMAGEURL + movie.getBackdropPath());
 

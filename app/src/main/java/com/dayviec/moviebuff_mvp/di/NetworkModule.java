@@ -11,7 +11,7 @@ import okhttp3.OkHttpClient.Builder;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
@@ -25,10 +25,11 @@ public class NetworkModule {
 
     @Provides
     public Retrofit provideRetrofit(OkHttpClient okHttpClient) {
-        return new Retrofit.Builder().baseUrl(BuildConfig.MOVIEAPIURL).addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
+        return new Retrofit.Builder().baseUrl(BuildConfig.MOVIEAPIURL)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder()
                 .registerTypeAdapterFactory(new ResultTypeAdapterFactory())
                 .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'").create()))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
     }

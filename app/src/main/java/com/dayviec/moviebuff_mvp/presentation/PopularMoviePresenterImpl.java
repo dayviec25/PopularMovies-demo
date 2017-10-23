@@ -15,11 +15,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 /**
  * Created by dayviec on 19/02/17.
  */
@@ -31,31 +30,30 @@ public class PopularMoviePresenterImpl implements PopularMoviePresenter {
     private static final String EXTRA_MOVIE = "extra_movie";
     private static final String EXTRA_POSTER_TRANSITION = "extra_transition";
 
-    private String TAG;
+    private String TAG = "PopularMoviePresenter";
     private MovieService service;
-    private CompositeSubscription subscriptions;
     private PopularMovieView view;
-    private List<Movie> movieList = new ArrayList<Movie>();
+    private CompositeDisposable subscriptions;
 
     public PopularMoviePresenterImpl(MovieService service, PopularMovieView view) {
-        this.TAG = "PopularMoviePresenterImpl";
         this.service = service;
         this.view = view;
-        this.subscriptions = new CompositeSubscription();
+        this.subscriptions = new CompositeDisposable();
     }
 
     public void getPopularMovies() {
         subscriptions.add(service.getPopularMovies(BuildConfig.APIKEY, 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Movie>>() {
+                .subscribeWith(new DisposableObserver<List<Movie>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Log.v(TAG,"onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        //view.displayErrorMessage();
                         Log.v(TAG,"onError:" + e.getMessage());
                     }
 
@@ -65,15 +63,14 @@ public class PopularMoviePresenterImpl implements PopularMoviePresenter {
                     }
                 }));
     }
-
 
     public void getAdditionalMoviesByPage(int page) {
         subscriptions.add(service.getPopularMovies(BuildConfig.APIKEY, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<Movie>>() {
+                .subscribeWith(new DisposableObserver<List<Movie>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onComplete() {
                         Log.v(TAG,"onComplete");
                     }
 
@@ -89,14 +86,12 @@ public class PopularMoviePresenterImpl implements PopularMoviePresenter {
                 }));
     }
 
-    public void onResume() {
-    }
+    public void onResume() {}
 
-    public void onPause() {
-    }
+    public void onPause() {}
 
     public void onStop(){
-        subscriptions.unsubscribe();
+        subscriptions.clear();
     }
 
     public void openMovieDetails(Activity activity, Movie movie, ImageView ivImagePoster){

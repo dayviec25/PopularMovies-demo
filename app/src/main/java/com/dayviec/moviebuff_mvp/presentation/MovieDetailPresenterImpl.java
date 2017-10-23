@@ -6,7 +6,7 @@ import com.dayviec.moviebuff_mvp.model.Movie;
 import com.dayviec.moviebuff_mvp.view.MovieDetailView;
 import com.google.gson.Gson;
 
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by davidchung on 2017-02-24.
@@ -18,13 +18,13 @@ public class MovieDetailPresenterImpl implements MovieDetailPresenter {
     private static final String EXTRA_MOVIE = "extra_movie";
     private static final String EXTRA_POSTER_TRANSITION = "extra_transition";
 
-    private CompositeSubscription subscriptions;
+    private CompositeDisposable subscriptions;
     private MovieDetailView view;
 
     public MovieDetailPresenterImpl(MovieDetailView view) {
         this.TAG = "PopularMoviePresenterImpl";
         this.view = view;
-        this.subscriptions = new CompositeSubscription();
+        this.subscriptions = new CompositeDisposable();
     }
 
     public void onResume() {
