@@ -1,6 +1,6 @@
 # PopularMovies-Demo
 
-Source code for Blog Series "Journey to becoming a better Android Developer" at www.dayviec.com
+Source code for Blog Series "Journey to becoming a better Android Developer" at dayviec.com
 
 The series is built to guide a developer from building an app from the ground up while covering some concepts and topics such as:
 * MVP (Model-View-Presenter)
